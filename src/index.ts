@@ -4,23 +4,10 @@ import axios, { AxiosInstance } from "axios";
 enum QosNetwork {
     MTN = "mtn",
     MOOV = "moov",
-
-}
-
-function makeid(length: Number): String {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
-    }
-    return result;
 }
 
 class Qos {
-   private axiosInstance: AxiosInstance;
-
+   
     constructor(
         public QosMtnKey: String,
         public QosMoovKey: String,
@@ -40,8 +27,20 @@ class Qos {
         });
     }
 
+    private axiosInstance: AxiosInstance;
 
-    public async makePayment(phoneNumber: String, amount: String, network: QosNetwork) {
+    private makeid(length: Number): String {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+
+    public async makePayment(phoneNumber: String, amount: Number, network: QosNetwork) {
         let transactionRef = null;
 
         try {
@@ -49,7 +48,7 @@ class Qos {
                 .post("/requestpayment", {
                     msisdn: phoneNumber,
                     amount: amount,
-                    transref: makeid(10),
+                    transref: this.makeid(10),
                     clientid:
                         network === QosNetwork.MTN
                             ? this.QosMtnKey
@@ -70,9 +69,9 @@ class Qos {
         }
 
         return transactionRef;
-    };
+    }
 
-    public async makeDeposit(phoneNumber: String, amount: String, network: QosNetwork) {
+    public async makeDeposit(phoneNumber: String, amount: Number, network: QosNetwork) {
         let transactionRef = null;
 
         try {
@@ -80,7 +79,7 @@ class Qos {
                 .post("/deposit", {
                     msisdn: phoneNumber,
                     amount: amount,
-                    transref: makeid(10),
+                    transref: this.makeid(10),
                     clientid:
                         network === QosNetwork.MTN
                             ? this.QosMtnKey
@@ -131,7 +130,7 @@ class Qos {
             console.log(error.config);
         }
         return response;
-    };
+    }
 
     public async getStatus(transref: String, network: QosNetwork) {
         let status = null;
@@ -165,7 +164,7 @@ class Qos {
 
 const qosInstance = new Qos("ImoneroCJL", "ImoneroDMV", "QSUSR515", "Kd9dcOxySm58ARge31A8");
 
-qosInstance.makePayment("22966478052", "1", QosNetwork.MTN).then((value) => {
+qosInstance.makePayment("22966478052", 1, QosNetwork.MTN).then((value) => {
     console.log(value);
-    
+
 }); 
