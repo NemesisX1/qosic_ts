@@ -160,11 +160,3 @@ class Qos {
         return status;
     }
 }
-
-
-const qosInstance = new Qos("ImoneroCJL", "ImoneroDMV", "QSUSR515", "Kd9dcOxySm58ARge31A8");
-
-qosInstance.makePayment("22966478052", 1, QosNetwork.MTN).then((value) => {
-    console.log(value);
-
-}); 
