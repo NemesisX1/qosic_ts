@@ -54,7 +54,7 @@ class Qos {
                             ? this.QosMtnKey
                             : this.QosMoovKey
                 })
-                .then((response) => {
+                .then((response: { data: { transref: any; }; }) => {
                     transactionRef = response.data.transref;
                 });
         } catch (error: any) {
@@ -85,7 +85,7 @@ class Qos {
                             ? this.QosMtnKey
                             : this.QosMoovKey
                 })
-                .then((response) => {
+                .then((response: { data: { transref: any; }; }) => {
                     // console.log(response.data.transref);
 
                     transactionRef = response.data.transref;
@@ -112,11 +112,11 @@ class Qos {
                 .post("/refund", {
                     transref: transref,
                     clientid:
-                        network === QosNetwork.MTN
-                            ? process.env.QOS_MTN_CLIENT_ID
-                            : process.env.QOS_MOOV_CLIENT_ID,
+                    network === QosNetwork.MTN
+                    ? this.QosMtnKey
+                    : this.QosMoovKey
                 })
-                .then((resp) => {
+                .then((resp: { data: { responsemsg: any; }; }) => {
                     response = resp.data.responsemsg;
                 });
         } catch (error: any) {
@@ -144,7 +144,7 @@ class Qos {
                             ? this.QosMtnKey
                             : this.QosMoovKey
                 })
-                .then((response) => {
+                .then((response: { data: { responsemsg: any; }; }) => {
                     status = response.data.responsemsg;
                 });
         } catch (error: any) {
