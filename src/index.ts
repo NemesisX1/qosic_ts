@@ -1,18 +1,17 @@
 import axios, { AxiosInstance } from "axios";
+import { QosNetwork } from "./shared/enums";
 
 
-enum QosNetwork {
-    MTN = "mtn",
-    MOOV = "moov",
-}
+export class Qos {
 
-class Qos {
-   
+    private axiosInstance: AxiosInstance;
+
+
     constructor(
-        public QosMtnKey: String,
-        public QosMoovKey: String,
-        public QosUsername: String,
-        public QosPassword: String,
+        public QosMtnKey: string,
+        public QosMoovKey: string,
+        public QosUsername: string,
+        public QosPassword: string,
     ) {
         this.axiosInstance = axios.create({
             baseURL: "https://qosic.net:8443/QosicBridge/user",
@@ -27,20 +26,19 @@ class Qos {
         });
     }
 
-    private axiosInstance: AxiosInstance;
 
-    private makeid(length: Number): String {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
+    private makeid(length: number): string {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() *
                 charactersLength));
         }
         return result;
     }
 
-    public async makePayment(phoneNumber: String, amount: Number, network: QosNetwork) {
+    public async makePayment(phoneNumber: string, amount: number, network: QosNetwork) {
         let transactionRef = null;
 
         try {
@@ -66,12 +64,13 @@ class Qos {
                 `]`
             );
             console.log(error.config);
+            throw new Error(error);
         }
 
         return transactionRef;
     }
 
-    public async makeDeposit(phoneNumber: String, amount: Number, network: QosNetwork) {
+    public async makeDeposit(phoneNumber: string, amount: number, network: QosNetwork) {
         let transactionRef = null;
 
         try {
@@ -99,12 +98,13 @@ class Qos {
                 `]`
             );
             console.log(error.config);
+            throw new Error(error);
         }
 
         return transactionRef;
     }
 
-    public async makeRefund(transref: String, network: QosNetwork) {
+    public async makeRefund(transref: string, network: QosNetwork) {
         let response = null;
 
         try {
@@ -112,9 +112,9 @@ class Qos {
                 .post("/refund", {
                     transref: transref,
                     clientid:
-                    network === QosNetwork.MTN
-                    ? this.QosMtnKey
-                    : this.QosMoovKey
+                        network === QosNetwork.MTN
+                            ? this.QosMtnKey
+                            : this.QosMoovKey
                 })
                 .then((resp: { data: { responsemsg: any; }; }) => {
                     response = resp.data.responsemsg;
@@ -128,12 +128,13 @@ class Qos {
                 `]`
             );
             console.log(error.config);
+            throw new Error(error);
         }
         return response;
     }
 
-    public async getStatus(transref: String, network: QosNetwork) {
-        let status = null;
+    public async getStatus(transref: string, network: QosNetwork) {
+        let status = '';
 
         try {
             await this.axiosInstance
@@ -156,7 +157,10 @@ class Qos {
                 `]`
             );
             console.log(error.config);
+            throw new Error(error);
         }
         return status;
     }
 }
+
+
