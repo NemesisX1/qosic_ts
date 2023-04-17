@@ -2,4 +2,4 @@
 
 A simple class to use QOS's api to handle USSD mobile money
 
-You can find an example in this [file](/tests/example.test.ts).
+You can find an example in this [file](/tests/example.test.ts). Don't to replace the number by yours

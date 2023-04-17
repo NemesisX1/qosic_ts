@@ -92,7 +92,7 @@ async function momoPayment(data: MomoPaymentDto): Promise<any> {
 
 momoPayment(
     {
-        phone: '22966478052',
+        phone: '229XXXXXXXX',
         amount: 1,
         network: QosNetwork.MTN
     }
